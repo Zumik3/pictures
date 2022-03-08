@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    {% block head %}
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% block styles %}
+    <!-- Bootstrap CSS -->
+    {{ bootstrap.load_css() }}
+    {% endblock %}
+
+    <title>Your page title</title>
+    {% endblock %}
+</head>
+<body>
+<!-- Your page content -->
+{% block content %}
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col" class="align-middle">Изображение</th>
+            <th scope="col" class="align-middle">Артикул</th>
+            <th scope="col" class="align-middle">Сезон</th>
+            <th scope="col" class="align-middle">Товарная категория</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in image_collection: %}
+        <tr>
+            <td width="150px">
+                <img width="150px" src="data:image/jpeg;base64, {{ item['image_base64'] }}" alt="">
+            </td>
+            <td class="align-middle">{{ item['article'] }}</td>
+            <td class="align-middle">{{ item['collection'] }}</td>
+            <td class="align-middle"></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- Optional JavaScript -->
+{{ bootstrap.load_js() }}
+{% endblock %}
+</body>
+</html>
