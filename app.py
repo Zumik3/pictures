@@ -52,6 +52,11 @@ def resp(code, data):
                     response=to_json(data))
 
 
+def append_picture(element):
+    return dict(article=element.item.article, collection=element.item.collection,
+                image_base64=base64.encodebytes(element.image).decode('UTF-8'))
+
+
 @app.route("/pictures/api/1.0/set_sku", methods=['POST'])
 @auth.login_required
 def set_sku():
@@ -114,19 +119,15 @@ def create_link():
 def show_icon():
 
     ref = request.args.get('ref')
-    if ref and ref != "":
-        link = db_connector.Link.get_or_none(db_connector.Link.ref == ref)
-        data_array = json.loads(str(link.data).replace("'", "\""))["data"]
-        image_collection = []
-        for element in db_connector.Image.select().join(db_connector.Item).where(
-                                              db_connector.Item.guid << data_array):
-            image_collection.append({"article": element.item.article, "collection": element.item.collection,
-                                    "image_base64": base64.encodebytes(element.image).decode('UTF-8')})
-
-        return render_template("index.html", image_collection=image_collection)
-
-    else:
+    link = db_connector.Link.get_or_none(db_connector.Link.ref == ref)
+    if link is None:
         return resp(404, {})
+
+    data_array = json.loads(str(link.data).replace("'", "\""))["data"]
+    query_result = db_connector.Image.select().join(db_connector.Item).where(db_connector.Item.guid << data_array)
+    image_collection = [append_picture(element) for element in query_result]
+
+    return render_template("index.html", image_collection=image_collection)
 
 
 if __name__ == "__main__":
