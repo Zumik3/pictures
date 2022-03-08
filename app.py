@@ -57,18 +57,20 @@ def append_picture(element):
                 image_base64=base64.encodebytes(element.image).decode('UTF-8'))
 
 
+def append_picture_for_insert(element):
+    item = db_connector.Item.get_or_none(db_connector.Item.guid == element["guid"])
+    if item is not None:
+        return dict(item=item, image=base64.b64decode(element["image"]), link=element["link"])
+
+
 @app.route("/pictures/api/1.0/set_sku", methods=['POST'])
 @auth.login_required
 def set_sku():
     request_data = request.get_json(force=True)
     data_array = request_data["data"]
-    sku_data = []
-    for item in data_array:
-        sku_data.append({'guid': item["guid"], 'name': item["name"], 'article': item["article"],
-                         'group': item["group"], 'collection': item["collection"]})
 
     try:
-        db_connector.Item.insert_many(sku_data).execute()
+        db_connector.Item.insert_many(data_array).execute()
         db_connector.db.close()
         return resp(200, {"success": True})
 
@@ -80,12 +82,7 @@ def set_sku():
 @auth.login_required
 def set_picture():
     request_data = request.get_json(force=True)
-    data_array = request_data["data"]
-    picture_data = []
-    for element in data_array:
-        item = db_connector.Item.get_or_none(db_connector.Item.guid == element["id"])
-        if item is not None:
-            picture_data.append({"item": item, "image": base64.b64decode(element["image"]), "link": element["link"]})
+    picture_data = [append_picture_for_insert(element) for element in request_data["data"]]
 
     try:
         db_connector.Image.insert_many(picture_data).execute()
