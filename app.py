@@ -104,7 +104,7 @@ def create_link():
         return resp(400, {"success": False, "error": str(e)})
 
 
-@app.route("/pictures/show/")
+@app.route("/pictures/show/", methods=['GET'])
 def show_icon():
 
     ref = request.args.get('ref')
