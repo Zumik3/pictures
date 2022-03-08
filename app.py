@@ -52,7 +52,7 @@ def resp(code, data):
                     response=to_json(data))
 
 
-def append_picture(element):
+def append_picture_for_select(element):
     return dict(article=element.item.article, collection=element.item.collection,
                 image_base64=base64.encodebytes(element.image).decode('UTF-8'))
 
@@ -122,7 +122,7 @@ def show_icon():
 
     data_array = json.loads(str(link.data).replace("'", "\""))["data"]
     query_result = db_connector.Image.select().join(db_connector.Item).where(db_connector.Item.guid << data_array)
-    image_collection = [append_picture(element) for element in query_result]
+    image_collection = [append_picture_for_select(element) for element in query_result]
 
     return render_template("index.html", image_collection=image_collection)
 
