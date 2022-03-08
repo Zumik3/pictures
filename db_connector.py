@@ -17,7 +17,7 @@ class BaseModel(Model):
         database = db
 
 
-class User(BaseModel):
+class User(BaseModel):  # Uses for user authoriztion
     username = CharField(column_name='username', max_length=100)
     password = CharField(column_name='password', max_length=200)
     email = CharField(column_name='email', max_length=100)
@@ -47,7 +47,7 @@ class Image(BaseModel):
         table_name = 'images'
 
 
-class Link(BaseModel):
+class Link(BaseModel):  # Uses for create links with content for customers
     ref = CharField(column_name='ref')
     data = TextField(column_name='data')
     created_date = DateField(column_name='created_date')
