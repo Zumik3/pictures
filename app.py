@@ -44,6 +44,22 @@ def resp(code, data):
                     response=to_json(data))
 
 
+def create_response(success=True, error=None, ref=None):
+    """
+    Creates dict for HTTP response
+    :param success:
+    :param error:
+    :param ref:
+    :return: Dict
+    """
+    result = {"success": success}
+    if error is not None:
+        result["error"] = error
+    if ref is not None:
+        result["ref"] = ref
+    return result
+
+
 def append_picture_for_select(element):
     """
     Add pictures to container and push this list to front
@@ -78,10 +94,10 @@ def set_sku():
     try:
         db_connector.Item.insert_many(data_array).execute()
         db_connector.db.close()
-        return resp(200, {"success": True})
+        return resp(200, create_response())
 
     except db_connector.IntegrityError as e:
-        return resp(400, {"success": False, "error": str(e)})
+        return resp(400, create_response(False, str(e)))
 
 
 @app.route("/pictures/api/1.0/set_picture", methods=['POST'])
@@ -93,10 +109,10 @@ def set_picture():
     try:
         db_connector.Image.insert_many(picture_data).execute()
         db_connector.db.close()
-        return resp(200, {"success": True})
+        return resp(200, create_response())
 
     except db_connector.IntegrityError as e:
-        return resp(400, {"success": False, "error": str(e)})
+        return resp(400, create_response(False, str(e)))
 
 
 @app.route("/pictures/api/1.0/create_link", methods=['POST'])
@@ -107,15 +123,15 @@ def create_link():
     for element in data_array:
         item = db_connector.Item.get_or_none(db_connector.Item.guid == element)
         if item is None:
-            return resp(200, {"success": False, "error": "Element not found in DB"})
+            return resp(400, {"success": False, "error": "Element not found in DB"})
 
     try:
         link = db_connector.Link(ref=uuid.uuid4().hex, data=request_data, created_date=datetime.datetime.now())
         link.save()
-        return resp(200, {"success": True, "ref": link.ref})
+        return resp(200, create_response(True, None, link.ref))
 
     except db_connector.IntegrityError as e:
-        return resp(400, {"success": False, "error": str(e)})
+        return resp(400, create_response(False, str(e)))
 
 
 @app.route("/pictures/show/", methods=['GET'])
@@ -124,7 +140,7 @@ def show_icon():
     ref = request.args.get('ref')
     link = db_connector.Link.get_or_none(db_connector.Link.ref == ref)
     if link is None:
-        return resp(404, {})
+        return resp(404, create_response(False, "Link is not found"))
 
     data_array = json.loads(str(link.data).replace("'", "\""))["data"]
     query_result = db_connector.Image.select().join(db_connector.Item).where(db_connector.Item.guid << data_array)
