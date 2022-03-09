@@ -45,11 +45,23 @@ def resp(code, data):
 
 
 def append_picture_for_select(element):
+    """
+    Add pictures to container and push this list to front
+    :param element:
+    :return:
+    """
     return dict(article=element.item.article, collection=element.item.collection,
                 image_base64=base64.encodebytes(element.image).decode('UTF-8'))
 
 
 def append_picture_for_insert(element):
+    """
+    Add pictures to container and insert them to DB
+    :param element:
+    :type element: dict
+
+    :return: New dict with image of element, as result of DB selection
+    """
     item = db_connector.Item.get_or_none(db_connector.Item.guid == element["guid"])
     if item is not None:
         return dict(item=item, image=base64.b64decode(element["image"]), link=element["link"])
