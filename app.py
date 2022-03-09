@@ -28,7 +28,7 @@ def verify_password(username, password):
 
 @auth.error_handler
 def unauthorized():
-    return resp(401, {'error': 'Unauthorized access'})
+    return resp(401, {'error': UNAUTHORIZED_ACCESS_MESSAGE})
 
 
 def to_json(data):
@@ -48,7 +48,9 @@ def append_picture_for_select(element):
     """
     Add pictures to container and push this list to front
     :param element:
-    :return:
+    :type element: dict()
+
+    :return: New dict with image
     """
     return dict(article=element.item.article, collection=element.item.collection,
                 image_base64=base64.encodebytes(element.image).decode('UTF-8'))
@@ -60,7 +62,7 @@ def append_picture_for_insert(element):
     :param element:
     :type element: dict
 
-    :return: New dict with image of element, as result of DB selection
+    :return: New dict with image of element, ready for DB insertion
     """
     item = db_connector.Item.get_or_none(db_connector.Item.guid == element["guid"])
     if item is not None:
