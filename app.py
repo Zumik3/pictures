@@ -140,7 +140,7 @@ def show_icon():
     ref = request.args.get('ref')
     link = db_connector.Link.get_or_none(db_connector.Link.ref == ref)
     if link is None:
-        return resp(404, create_response(False, "Link is not found"))
+        return resp(404, create_response(False, LINK_NOT_FOUND_MESSAGE))
 
     data_array = json.loads(str(link.data).replace("'", "\""))["data"]
     query_result = db_connector.Image.select().join(db_connector.Item).where(db_connector.Item.guid << data_array)
