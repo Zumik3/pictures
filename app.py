@@ -72,7 +72,7 @@ def append_picture_for_select(element):
                 image_base64=base64.encodebytes(element.image).decode('UTF-8'))
 
 
-def append_picture_for_insert(element):
+def append_picture_for_insert(element) -> dict:
     """
     Add pictures to container and insert them to DB
     :param element:
