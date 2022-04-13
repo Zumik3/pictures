@@ -47,7 +47,7 @@ class Image(BaseModel):
         table_name = 'images'
 
 
-class Link(BaseModel):  # Uses for create links with content for customers
+class Link(BaseModel):  # Uses for create links with content for customers!!!
     ref = CharField(column_name='ref')
     data = TextField(column_name='data')
     created_date = DateField(column_name='created_date')
