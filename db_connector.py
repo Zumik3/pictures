@@ -29,18 +29,29 @@ class User(BaseModel):  # Uses for user authorization
 
 class Item(BaseModel):
     guid = CharField(column_name='guid', max_length=36)
-    name = CharField(column_name='name', max_length=100)
     article = CharField(column_name='article', max_length=50)
     group = CharField(column_name='group', max_length=50)
     collection = CharField(column_name='collection', max_length=50)
+    brand = CharField(column_name='brand', max_length=50)
+    type = CharField(column_name='type', max_length=50)
+    color = CharField(column_name='color', max_length=50)
+    segment = CharField(column_name='segment', max_length=50)
+    material = CharField(column_name='material', max_length=50)
+    lining = CharField(column_name='lining', max_length=50)
+    insole = CharField(column_name='insole', max_length=50)
+    size_chart = CharField(column_name='size_chart', max_length=100)
+    packaged = IntegerField(column_name='packaged')
+    price = FloatField(column_name='price')
 
     class Meta:
         table_name = 'items'
 
 
 class Image(BaseModel):
+    guid = CharField(column_name='guid', max_length=36)
     item = ForeignKeyField(Item, backref='pictures')
     image = BlobField(column_name='image')
+    type = IntegerField(column_name='type')
     link = CharField(column_name='link')
 
     class Meta:
