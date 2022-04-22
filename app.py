@@ -1,11 +1,10 @@
 import datetime
-from flask import Flask
-from flask import render_template
+from flask import Flask, render_template
 from auth import *
+from support import *
 from flask_bootstrap import Bootstrap5
 import excel_support
 import image_support
-from support import *
 
 
 app = Flask(__name__)
