@@ -11,7 +11,7 @@
     {{ bootstrap.load_css() }}
     {% endblock %}
 
-    <title>Your page title</title>
+    <title>Analpa pictures database</title>
     {% endblock %}
 </head>
 <body onload="body_onload();">
@@ -105,8 +105,11 @@ function body_onload() {
 
 function save_static_data() {
 
+    var s = window.location.search.match(new RegExp('ref' + '=([^&=]+)'));
+    href = document.location.protocol + '//' + document.location.host + '/pictures/getfile?ref=' + s[1];
+
     const Http = new XMLHttpRequest();
-    Http.open("GET", "http://192.168.1.44:5000/pictures/getfile?ref=7f879c4f5f9648259a15ff4eb47b7018");
+    Http.open("GET", href);
 
     Http.onload = function () {
         downloadFile(Http.response, 'test.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,')

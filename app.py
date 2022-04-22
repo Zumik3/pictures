@@ -1,13 +1,8 @@
 import datetime
 from flask import Flask
 from flask import render_template
-import db_connector
-import base64
-import auth
+from auth import *
 from flask_bootstrap import Bootstrap5
-import pandas as pd
-import os
-
 import excel_support
 import image_support
 from support import *
@@ -38,9 +33,15 @@ def set_picture():
     request_data = request.get_json(force=True)
     picture_data = [image_support.append_picture_for_insert(element) for element in request_data["data"]]
 
+    filtered_picture_data = list(filter(lambda x: x is not None, picture_data))
+
     try:
-        db_connector.Image.insert_many(picture_data).execute()
-        db_connector.db.close()
+        logging.error(picture_data)
+
+        if len(filtered_picture_data) > 0:
+            db_connector.Image.insert_many(filtered_picture_data).execute()
+            db_connector.db.close()
+
         return resp(200, create_response())
 
     except db_connector.IntegrityError as e:
@@ -117,7 +118,7 @@ def show_article():
     query_result = db_connector.Image.select().join(db_connector.Item).where(db_connector.Item.guid == article_guid)
     image_collection = [image_support.append_picture_for_select(element) for element in query_result]
 
-    return render_template("index.html", image_collection=image_collection)
+    return render_template("article.html", image_collection=image_collection)
 
 
 if __name__ == "__main__":

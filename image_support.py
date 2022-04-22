@@ -21,7 +21,7 @@ def append_picture_for_select(element):
     return result
 
 
-def append_picture_for_insert(element) -> dict:
+def append_picture_for_insert(element):
     """
     Add pictures to container and insert them to DB
     :param element:
@@ -31,7 +31,10 @@ def append_picture_for_insert(element) -> dict:
     """
     item = db_connector.Item.get_or_none(db_connector.Item.guid == element['guid'])
     if item is not None:
-        return dict(item=item, guid=uuid4(), image=base64.b64decode(element['image']), link=element['link'])
+        return dict(item=item, guid=uuid4(), type=element['type'],
+                    image=base64.b64decode(element['image']), link=element['link'])
+    else:
+        return None
 
 
 def add_picture_to_excel(worksheet, image_base64, column, row):
