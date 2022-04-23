@@ -6,13 +6,12 @@ import os
 
 
 def file_to_base64(file_name):
-    with open(file_name, 'rb') as infile:
-        raw_data = infile.read()
+    with open(file_name, 'rb') as file:
+        raw_data = file.read()
         return base64.encodebytes(raw_data).decode('UTF-8')
 
 
 def main_table_to_excel(file_name, image_collection, remove_file=False):
-
     df = pd.DataFrame({main_dict[x]: [a[x] for a in image_collection] for x in main_dict})
     df.insert(0, IMAGE_COLUMN_NAME, "")
 
@@ -28,7 +27,6 @@ def main_table_to_excel(file_name, image_collection, remove_file=False):
         image_support.add_picture_to_excel(worksheet, image_collection[i]['image_base64'], 0, i + 1)
 
     excel_writer.save()
-
     base64result = file_to_base64(file_name)
 
     if remove_file:

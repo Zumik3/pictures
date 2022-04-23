@@ -17,7 +17,7 @@ class BaseModel(Model):
         database = db
 
 
-class User(BaseModel):  # Uses for user authorization
+class User(BaseModel):
     username = CharField(column_name='username', max_length=100)
     password = CharField(column_name='password', max_length=200)
     email = CharField(column_name='email', max_length=100)

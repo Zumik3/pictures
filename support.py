@@ -22,13 +22,6 @@ def resp(code, data):
 
 
 def create_response(success=True, error=None, ref=None):
-    """
-    Creates dict for HTTP response
-    :param success:
-    :param error:
-    :param ref:
-    :return: Dict
-    """
     result = {"success": success}
     if error is not None:
         result["error"] = error
