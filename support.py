@@ -8,6 +8,17 @@ dictConfig(LOGGING_CONFIG)
 logging.getLogger(__name__)
 
 
+class MainFrame:
+
+    def __init__(self):
+        self.table = dict(article='Артикул', collection='Сезон',
+                          brand='Марка', type='Тип', color='Цвет',
+                          segment='Сегмент', material='Материал',
+                          lining='Подкладка', insole='Стелька',
+                          size_chart='Размерная сетка', packaged='В коробе',
+                          price='Цена')
+
+
 def to_json(data):
     return json.dumps(data) + "\n"
 

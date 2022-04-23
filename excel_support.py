@@ -3,6 +3,7 @@ import base64
 from config import *
 import image_support
 import os
+from support import MainFrame
 
 
 def file_to_base64(file_name):
@@ -12,13 +13,14 @@ def file_to_base64(file_name):
 
 
 def main_table_to_excel(file_name, image_collection, remove_file=False):
-    df = pd.DataFrame({main_dict[x]: [a[x] for a in image_collection] for x in main_dict})
+    mf = MainFrame()
+    df = pd.DataFrame({mf.table[x]: [a[x] for a in image_collection] for x in mf.table})
     df.insert(0, IMAGE_COLUMN_NAME, "")
 
     excel_writer = pd.ExcelWriter(file_name, engine='xlsxwriter')
-    df.to_excel(excel_writer, sheet_name='Sheet1', index=False)
+    df.to_excel(excel_writer, sheet_name=SHEET_NAME, index=False)
 
-    worksheet = excel_writer.sheets['Sheet1']
+    worksheet = excel_writer.sheets[SHEET_NAME]
     worksheet.set_column(0, 0, DEFAULT_PICTURE_COLUMN_WIDTH)
     worksheet.set_column(1, 0, DEFAULT_PICTURE_COLUMN_WIDTH)
     worksheet.set_default_row(DEFAULT_ROW_HEIGHT)
