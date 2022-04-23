@@ -107,7 +107,7 @@ def show_list():
 
     image_collection = [image_support.append_picture_for_select(element) for element in query_result]
 
-    return render_template('index.html', image_collection=image_collection, main_dict=main_dict)
+    return render_template('index.html', image_collection=image_collection, main_dict=MainFrame().table)
 
 
 @app.route("/pictures/article/", methods=['GET'])
