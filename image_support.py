@@ -2,7 +2,6 @@ import db_connector
 import re
 from io import BytesIO
 import base64
-from config import main_dict
 from uuid import uuid4
 
 
