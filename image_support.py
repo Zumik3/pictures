@@ -2,12 +2,13 @@ import db_connector
 import re
 from io import BytesIO
 import base64
-from config import main_dict
+# from config import main_dict
+from support import MainFrame
 from uuid import uuid4
 
 
 def append_picture_for_select(element):
-    result = {key: getattr(element.item, key) for key in main_dict}
+    result = {key: getattr(element.item, key) for key in MainFrame().table}
     result['guid'] = element.item.guid
     result['image_base64'] = base64.encodebytes(element.image).decode('UTF-8')
 

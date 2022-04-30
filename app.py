@@ -1,5 +1,9 @@
 import datetime
+import uuid
+
 from flask import Flask, render_template
+
+import db_connector
 from auth import *
 from support import *
 from flask_bootstrap import Bootstrap5
@@ -19,7 +23,6 @@ def set_sku():
 
     try:
         db_connector.Item.insert_many(data_array).execute()
-        db_connector.db.close()
         return resp(200, create_response())
 
     except db_connector.IntegrityError as e:
@@ -39,7 +42,6 @@ def set_picture():
 
         if len(filtered_picture_data) > 0:
             db_connector.Image.insert_many(filtered_picture_data).execute()
-            db_connector.db.close()
 
         return resp(200, create_response())
 
@@ -106,6 +108,18 @@ def show_list():
             (db_connector.Item.guid << data_array) & (db_connector.Image.type == 0))
 
     image_collection = [image_support.append_picture_for_select(element) for element in query_result]
+
+    test1 = db_connector.Demo1(name='test111', guid=uuid.uuid4())
+    test1.save(force_insert=True)
+
+    test2 = db_connector.Demo2(name='test111', demo1=test1)
+    test2.save()
+
+    # test1 = db_connector.Demo2.select().join(db_connector.Demo1).where(db_connector.Demo1.name == 'trtrrtr')
+    # if test1 is None:
+    #     logging.error('not found')
+    # else:
+    #     logging.error(test1[0].demo1.name)
 
     return render_template('index.html', image_collection=image_collection, main_dict=MainFrame().table)
 

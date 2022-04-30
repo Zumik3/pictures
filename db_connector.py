@@ -1,3 +1,5 @@
+import uuid
+import logging
 from peewee import *
 from config import MYSQL_DATABASE
 from config import MYSQL_HOST
@@ -67,6 +69,23 @@ class Link(BaseModel):  # Uses for create links with content for customers!!!
         table_name = 'links'
 
 
+class Demo1(BaseModel):
+    guid = UUIDField(primary_key=True, default=uuid.uuid4)
+    name = TextField()
+
+    class Meta:
+        table_name = 'Demo1'
+
+
+class Demo2(BaseModel):
+
+    name = TextField()
+    demo1 = ForeignKeyField(Demo1, backref='Demo')
+
+    class Meta:
+        table_name = 'Demo2'
+
+
 if not Item.table_exists():
     Item.create_table()
 if not Image.table_exists():
@@ -75,3 +94,8 @@ if not User.table_exists():
     User.create_table()
 if not Link.table_exists():
     Link.create_table()
+if not Demo1.table_exists():
+    Demo1.create_table()
+if not Demo2.table_exists():
+    Demo2.create_table()
+
