@@ -1,4 +1,4 @@
-from app import app
+from app.app import app
 
 # main point
 if __name__ == "__main__":

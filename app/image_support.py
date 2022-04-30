@@ -1,4 +1,4 @@
-import db_connector
+from app import db_connector
 import re
 from io import BytesIO
 import base64

@@ -1,7 +1,7 @@
 import pandas as pd
 import base64
 from config import *
-import image_support
+from app import image_support
 import os
 
 
