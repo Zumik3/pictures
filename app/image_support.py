@@ -3,6 +3,7 @@ import re
 from io import BytesIO
 import base64
 from uuid import uuid4
+from config import main_dict
 
 
 def append_picture_for_select(element):
